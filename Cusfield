@@ -311,8 +311,8 @@ local RayfieldLibrary = {
     Pastel = {
 			TextColor = Color3.fromRGB(255, 240, 240),
 
-			Background = Color3.fromRGB(255, 195, 195),
-			Topbar = Color3.fromRGB(247, 214, 214),
+			Background = Color3.fromRGB(247, 214, 214),
+			Topbar = Color3.fromRGB(255, 195, 195),
 			Shadow = Color3.fromRGB(20, 20, 20),
 
 			NotificationBackground = Color3.fromRGB(247, 214, 214),

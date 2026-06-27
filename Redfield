@@ -1,0 +1,112 @@
+local CusField = loadstring(game:HttpGet("https://raw.githubusercontent.com/h4ltbackend/Cusfield/refs/heads/main/Cusfield"))()
+
+local Window = CusField:CreateWindow({
+    Name = "Redfield Fucker"
+})
+
+local MainTab = Window:CreateTab("Penthouse")
+local Avatar = Window:CreateTab("Avatars")
+
+MainTab:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+
+        hrp.CFrame = CFrame.new(-368, 22, -118)
+    end
+})
+
+MainTab:CreateButton({
+    Name = "Load Penthouse",
+    Callback = function()
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Workspace = game:GetService("Workspace")
+
+        local player = Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart")
+
+        -- Find the Penthouse folder/model
+        local folder = ReplicatedStorage:FindFirstChild("Assets"):FindFirstChild("Penthouse")
+        if not folder then
+            warn("Penthouse folder not found in ReplicatedStorage.")
+            return
+        end
+
+        local penthouse = folder:FindFirstChild("Penthouse")
+        if not penthouse then
+            warn("Penthouse model not found.")
+            return
+        end
+
+        -- Move the model into Workspace
+        penthouse.Parent = Workspace
+
+        -- Delete every descendant whose name contains "door"
+        for _, obj in ipairs(penthouse:GetDescendants()) do
+            if string.find(string.lower(obj.Name), "door") then
+                obj:Destroy()
+            end
+        end
+
+        -- Teleport the player to the model
+        local target
+
+        if penthouse.PrimaryPart then
+            target = penthouse.PrimaryPart.Position
+        else
+            local _, size = penthouse:GetBoundingBox()
+            target = penthouse:GetPivot().Position + Vector3.new(0, size.Y / 2 + 5, 0)
+        end
+
+        hrp.CFrame = CFrame.new(target)
+    end,
+})
+
+Avatar:CreateSlider({
+    Name = "Height",
+    Range = {0, 100},
+    Increment = 1,
+    CurrentValue = 100,
+    Callback = function(Value)
+        game:GetService("ReplicatedStorage").Events.ProfileHandler:FireServer(
+            "AvatarEquipItem",
+            "Height",
+            false,
+            tostring(Value)
+        )
+    end,
+})
+
+Avatar:CreateSlider({
+    Name = "Width",
+    Range = {0, 100},
+    Increment = 1,
+    CurrentValue = 100,
+    Callback = function(Value)
+        game:GetService("ReplicatedStorage").Events.ProfileHandler:FireServer(
+            "AvatarEquipItem",
+            "Width",
+            false,
+            tostring(Value)
+        )
+    end,
+})
+
+Avatar:CreateSlider({
+    Name = "Head",
+    Range = {0, 100},
+    Increment = 1,
+    CurrentValue = 100,
+    Callback = function(Value)
+        game:GetService("ReplicatedStorage").Events.ProfileHandler:FireServer(
+            "AvatarEquipItem",
+            "Head",
+            false,
+            tostring(Value)
+        )
+    end,
+})
